@@ -4,6 +4,8 @@ print("Its fleece was white as {}.".format('snow'))
 print("And everywhere that Mary went.")
 # 字符串乘积？
 print("." * 10)  # what'd that do?
+print("." * 3)
+print("$" * 12)
 
 end1 = "C"
 end2 = "h"
