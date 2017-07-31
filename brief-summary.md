@@ -7,6 +7,8 @@
 
 所以语法错误问题是比较容易解决的。运行Python程序文件，查看Python错误信息，在这里我们看到‘File "exercise26.py", line 10’，用一个带行号的编辑器打开错误文件，在第10行发现‘print_first_word’方法是少了一个冒号，修正后再次运行错误就能解决了。见下图：
 
+![](https://github.com/JeetChan/LearnPythontheHardWay/blob/master/image/debug.png)
+
 随着我们不断深入学习，犯的语法错误会越来越少，这个时候我们会遇到运行时错误和语义错误。当苦思冥想也无法解决问题时我们需要善于提问，运用搜索帮助解决问题。
 
 
@@ -18,3 +20,7 @@
 [Stack Overflow](https://stackoverflow.com/)
 
 [提问的智慧](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md)
+
+## CHANGELOG
+
+* 170731创建
