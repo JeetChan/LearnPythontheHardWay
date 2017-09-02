@@ -67,6 +67,9 @@ def search_history():
     else:
         return jsonify(render_template('history_data.html', data={'message': '还没有历史查询记录！'}))
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
