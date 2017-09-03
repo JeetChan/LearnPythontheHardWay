@@ -52,7 +52,7 @@ def search_weather():
         except HTTPError as ex:
             data = {'message': ex.msg}
             return jsonify(render_template('weather_data.html', error=data))
-
+    # print(form.errors)  {'csrf_token': ['The CSRF token has expired.']}            
     data = {'message': form.errors['city'][0]}
 
     return jsonify(render_template('weather_data.html',  data=data))
