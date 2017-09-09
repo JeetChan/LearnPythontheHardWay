@@ -1,0 +1,126 @@
+{% extends 'bootstrap/base.html' %} {% block title %}{{ title_name }}{% endblock %} {% block content %} {% block styles %}
+{{ super() }}
+<!-- <link rel="stylesheet" href="https://bootswatch.com/cerulean/bootstrap.min.css"> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.cerulean.min.css') }}">
+
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script type=text/javascript>
+    var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+
+
+    <script type=text/javascript src="{{
+        url_for('static', filename='js/jquery.blockUI.min.js') }}"></script>
+
+{% endblock %}
+
+<div class="page-header">
+    <div class="container">
+        <h1>{{ self.title() }}</h1>
+    </div>
+</div>
+
+<div class="container">
+
+    <form class="form-inline" role="form"  enctype=”multipart/form-data id="frmWeather">
+        <div class="form-group">
+           
+            {{ form.hidden_tag() }} {{ form.city.label }} {{ form.city(size=20) }}
+        </div>
+        <button type="button" id="aa" class="btn btn-primary" name="order" data-value="search">查询</button>
+        <button type="button" class="btn btn-primary" name="order" data-value="history">历史</button>
+        <button type="button" class="btn btn-primary" name="order" data-value="help">帮助</button>
+    </form>
+
+    <div id="results" style="display:none">
+    </div>
+    <div id="help">
+        <div class="col-md-4 grid">
+            <h3><i></i>帮助</h3>
+            <h4><i></i>输入城市名，获取该城市最新天气情况；</h4>
+            <h4><i></i>点击「帮助」，获取帮助信息；</h4>
+            <h4><i></i>点击「历史」，获取历史查询信息。</h4>
+           
+        </div>
+    </div>
+
+
+</div>
+
+<script type=text/javascript>
+    $(function() {
+        $("#frmWeather").children(".btn").each(function(k,v){
+         $(v).click(function(e){
+            var dataValue = $(e.target).attr('data-value');
+            if (dataValue == 'help') {
+                $("#help").css('display','block');
+                $("#results").css('display','none');
+            }else{
+
+                $("#help").css('display','none'); 
+                $("#results").css('display','block');
+
+                var url = "/" + dataValue;
+                var params = $('form').serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: params,
+                    beforeSend: function () {
+                        $.blockUI();
+                    },
+                    success: function(data){
+                                $('#frmWeather')[0].reset();
+                                $('#results').empty();
+                                $('#results').append(data);
+                    },
+                    complete: function () {
+                        $.unblockUI();
+                    }
+       });
+            }
+         });
+     });
+
+     
+        $("#test").click(function() {
+        var $btn = $(this);
+        var params = $('form').serialize();
+        var $target = $($btn.attr('data-target'));
+
+        
+        var url = '';
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: params,
+            success: function(data){
+                console.log(data);
+            }
+       });
+    });
+
+         // Inject our CSRF token into our AJAX request.
+         $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+                }
+            }
+        })
+
+    });
+
+</script>
+
+{% endblock content %} {% block head %} {{ super() }} {% endblock %}
