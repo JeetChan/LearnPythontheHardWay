@@ -15,3 +15,5 @@ sqlite3
 .open E:\\Learn\\Python\\flask-sqlite\\app\\test.db
 # 关闭虚拟环境
 deactivate
+# 删除测试环境
+rd /s E:\Learn\Python\virtualenv\py3_t

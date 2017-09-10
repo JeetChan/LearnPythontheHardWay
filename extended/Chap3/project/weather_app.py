@@ -19,8 +19,8 @@ from urllib.error import HTTPError
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
-# 加载本地资源
-app.config['BOOTSTRAP_SERVE_LOCAL'] = True
+# 加载本地资源 移至 config 配置文件
+# app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 app.config.from_object('config')
 
 
