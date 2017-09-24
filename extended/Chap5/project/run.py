@@ -31,12 +31,15 @@ db = SQLAlchemy(app)
 
 
 class History(db.Model):
+    __tablename__ = 'history'
     id = db.Column(db.Integer, primary_key=True)
-    city = db.Column(db.String(50), unique=True)
+    city = db.Column(db.String(50), )
     text = db.Column(db.String(50))
     temperature = db.Column(db.String(50))
     wind_direction = db.Column(db.String(50))
     update_time = db.Column(db.String(50))
+    __table_args__ = (db.UniqueConstraint('city', 'update_time', name='_city_update_time_uc'),
+                     )
 
     def __init__(self, city, text, temperature, wind_direction, update_time):
         self.city = city
@@ -83,7 +86,7 @@ def search_weather():
             else:
                 weather_data = weather_servers.format_weather(form.city.data)
                 db.session.add(History(weather_data.get('city'), weather_data.get(
-                    'text'), weather_data.get('temperature'), weather_data.get('wind_direction')))
+                    'text'), weather_data.get('temperature'), weather_data.get('wind_direction'),weather_data.get('last_update')))
                 db.session.commit()
 
             return jsonify(render_template('weather_data.html', weather_data=weather_data))
@@ -99,19 +102,20 @@ def search_weather():
 
 @app.route('/history', methods=('GET', 'POST'))
 def search_history():
-    historys = History.query.slice(1, 3)
+    historys = History.query.order_by(History.id.desc()).limit(3).all()
     if historys is not None:
         return jsonify(render_template('history_data.html', weather_datas=historys))
     else:
         return jsonify(render_template('history_data.html', data={'message': '还没有历史查询记录！'}))
 
 
-@app.route('/update', methods=('GET', 'POST'))
-def update():
+@app.route('/corrected', methods=('GET', 'POST'))
+def corrected():
     form = WeatherForm()
     if form.validate_on_submit():
         history = History.query.filter_by(
             city=form.city.data.split()[0]).first()
+        # print(form.city.data.split()[0])
         if history is not None:
             history.text = form.city.data.split()[1]
             db.session.add(history)

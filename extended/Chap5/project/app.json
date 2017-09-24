@@ -1,0 +1,24 @@
+{
+  "name": "Start on Heroku: Python",
+  "description": "A barebones Python app, which can easily be deployed to Heroku.",
+  "image": "heroku/python",
+  "repository": "https://github.com/JeetChan/Py101-004/tree/master/Chap5/project",
+  "keywords": ["python", "django" ],
+  "addons": [ "heroku-postgresql" ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-pgbouncer"
+    },
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "environments": {
+    "test": {
+      "scripts": {
+        "test-setup": "python weather_app.py collectstatic --noinput",
+        "test": "python weather_app.py test"
+      }
+    }
+  }
+}

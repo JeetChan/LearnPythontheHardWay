@@ -1,0 +1,12 @@
+{% block body %}
+<div class="col-md-4 grid">
+    {% if data %}
+    <h3><i></i>{{ data['message'] }} </h3>
+    {% else %}
+    <h3><i></i>历史查询信息 </h3>
+    {% for weather_data in weather_datas %}
+    <h4><i></i>{{ weather_data['city'] }} 的天气为 {{ weather_data['text'] }}，风向为 {{ weather_data['wind_direction'] }}，温度为 {{ weather_data['temperature']
+        }} &#8451; 。</h4>
+    {% endfor %} {% endif %}
+</div>
+{% endblock %}
